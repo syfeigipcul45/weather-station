@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">WeatherStation</string>
+    <string name="login">Login</string>
+    <string name="title_activity_menu">MenuActivity</string>
+    <string name="title_sensor">Data Sensor</string>
+    <string name="title_pompa">Pompa</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="pengawasan_pengendalian"><![CDATA[Pengawasan & Pengendalian]]></string>
+</resources>

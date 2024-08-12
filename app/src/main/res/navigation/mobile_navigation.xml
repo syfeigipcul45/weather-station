@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_sensor">
+
+    <fragment
+        android:id="@+id/navigation_sensor"
+        android:name="com.example.weatherstation.form.ui.sensor.SensorFragment"
+        android:label="@string/title_sensor"
+        tools:layout="@layout/fragment_sensor" />
+
+    <fragment
+        android:id="@+id/navigation_pompa"
+        android:name="com.example.weatherstation.form.ui.dashboard.DashboardFragment"
+        android:label="@string/title_pompa"
+        tools:layout="@layout/fragment_dashboard" />
+</navigation>
