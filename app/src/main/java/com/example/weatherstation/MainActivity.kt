@@ -49,6 +49,11 @@ class MainActivity : AppCompatActivity() {
                     processError(it.msg)
                 }
 
+                is BaseResponse.Expired -> {
+                    showLoading(false)
+                    navigateToLogin()
+                }
+
                 else -> {
                     showLoading(false)
                 }
@@ -62,6 +67,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun navigateToHome() {
         val intent = Intent(this, MenuActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+        startActivity(intent)
+    }
+
+    private fun navigateToLogin() {
+        val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
         startActivity(intent)

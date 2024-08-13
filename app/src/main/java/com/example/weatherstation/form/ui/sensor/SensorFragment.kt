@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import com.example.weatherstation.R
 import com.example.weatherstation.databinding.FragmentSensorBinding
 import com.example.weatherstation.manager.SessionManager
@@ -22,7 +23,7 @@ class SensorFragment : Fragment() {
 
     companion object {
         private const val TAG = "FragmentSensor"
-        private var token = ""
+//        private var token = ""
     }
 
     override fun onCreateView(
@@ -36,60 +37,46 @@ class SensorFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        token = SessionManager.getToken(requireContext().applicationContext).toString()
-        getTelemetry()
+        SensorViewModel.token =
+            SessionManager.getToken(requireContext().applicationContext).toString()
+        val sensorViewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.NewInstanceFactory()
+        ).get(SensorViewModel::class.java)
+
+        sensorViewModel.sensorTelemetry.observe(viewLifecycleOwner) { telemetryResponse ->
+            getTelemetry(telemetryResponse)
+        }
+
+        sensorViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            showLoading(isLoading)
+        }
+
     }
 
-    private fun getTelemetry() {
-        showLoading(true)
-        val client = ApiConfig.getServiceApi().getTelemetry("Bearer " + token)
-        client.enqueue(object : Callback<TelemetryResponse> {
-
-            override fun onResponse(
-                call: Call<TelemetryResponse>,
-                response: Response<TelemetryResponse>
-            ) {
-                showLoading(false)
-                if (response.isSuccessful) {
-                    val responseBody = response.body()
-                    if (responseBody != null) {
-                        binding.tvTemperature.text =
-                            responseBody.temperature.get(0).value + " \u2103"
-                        binding.tvHumidity.text = responseBody.humidity.get(0).value + " %"
-                        binding.tvCuaca.text = responseBody.lightSensor.get(0).value +" lux"
-                        binding.tvRain.text = responseBody.rainHour.get(0).value +" mm"
-                        binding.tvWindSpeed.text = responseBody.windSpeed.get(0).value
-                        binding.tvWindDirection.text = responseBody.windDirection.get(0).value
-                        binding.tvPm1.text = responseBody.pM1_0.get(0).value
-                        binding.tvPm25.text = responseBody.pM2_5.get(0).value
-                        binding.tvPm10.text = responseBody.pM10.get(0).value
-                        getWindDirection(responseBody.windDirection.get(0).value)
-                        getStatusPM1(responseBody.pM1_0.get(0).value)
-                        getStatusPM2_5(responseBody.pM2_5.get(0).value)
-                        getStatusPM10(responseBody.pM10.get(0).value)
-                        getStatusCuaca(
-                            responseBody.lightSensor.get(0).value,
-                            responseBody.rainHour.get(0).value
-                        )
-                    }
-                } else {
-                    Log.e(TAG, "onFailure No Response: ${response.message()}")
-                }
-            }
-
-            override fun onFailure(call: Call<TelemetryResponse>, t: Throwable) {
-                showLoading(false)
-                Log.e(TAG, "onFailure: ${t.message}")
-            }
-        })
+    private fun getTelemetry(response: TelemetryResponse) {
+        binding.tvTemperature.text =
+            response.temperature.get(0).value + " \u2103"
+        binding.tvHumidity.text = response.humidity.get(0).value + " %"
+        binding.tvCuaca.text = response.lightSensor.get(0).value + " lux"
+        binding.tvRain.text = response.rainHour.get(0).value + " mm"
+        binding.tvWindSpeed.text = response.windSpeed.get(0).value
+        binding.tvWindDirection.text = response.windDirection.get(0).value
+        binding.tvPm1.text = response.pM1_0.get(0).value
+        binding.tvPm25.text = response.pM2_5.get(0).value
+        binding.tvPm10.text = response.pM10.get(0).value
+        getWindDirection(response.windDirection.get(0).value)
+        getStatusPM1(response.pM1_0.get(0).value)
+        getStatusPM2_5(response.pM2_5.get(0).value)
+        getStatusPM10(response.pM10.get(0).value)
+        getStatusCuaca(
+            response.lightSensor.get(0).value,
+            response.rainHour.get(0).value
+        )
     }
 
     private fun showLoading(isLoading: Boolean) {
-        if (isLoading) {
-            binding.progressBarSensor.visibility = View.VISIBLE
-        } else {
-            binding.progressBarSensor.visibility = View.GONE
-        }
+        binding.progressBarSensor.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     private fun getWindDirection(value: String) {
