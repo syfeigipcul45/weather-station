@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/navigation_pompa"
-        android:name="com.example.weatherstation.form.ui.dashboard.DashboardFragment"
+        android:name="com.example.weatherstation.form.ui.pompa.PompaFragment"
         android:label="@string/title_pompa"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_pompa" />
 </navigation>

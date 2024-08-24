@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "998397698879",
+    "firebase_url": "https://weather-station-6c0fe-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "weather-station-6c0fe",
+    "storage_bucket": "weather-station-6c0fe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:998397698879:android:babbff36441a08584e698a",
+        "android_client_info": {
+          "package_name": "com.example.weatherstation"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuqYbiu1PmyHm8YkkvkUVYU95CgQZCOGk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

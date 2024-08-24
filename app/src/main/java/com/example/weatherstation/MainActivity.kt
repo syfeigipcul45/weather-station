@@ -49,11 +49,6 @@ class MainActivity : AppCompatActivity() {
                     processError(it.msg)
                 }
 
-                is BaseResponse.Expired -> {
-                    showLoading(false)
-                    navigateToLogin()
-                }
-
                 else -> {
                     showLoading(false)
                 }

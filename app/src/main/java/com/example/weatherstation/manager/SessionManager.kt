@@ -2,7 +2,9 @@ package com.example.weatherstation.manager
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.auth0.android.jwt.JWT
 import com.example.weatherstation.R
+import java.util.Date
 
 object SessionManager {
     const val USER_TOKEN = "user_token"
@@ -15,14 +17,14 @@ object SessionManager {
         return getString(context, USER_TOKEN)
     }
 
-    fun saveString(context: Context, key: String, value: String){
+    private fun saveString(context: Context, key: String, value: String){
         val prefs: SharedPreferences = context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE)
         val editor = prefs.edit()
         editor.putString(key, value)
-        editor.apply()
+        editor.commit()
     }
 
-    fun getString(context: Context, key: String): String? {
+    private fun getString(context: Context, key: String): String? {
         val prefs: SharedPreferences = context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE)
         return prefs.getString(this.USER_TOKEN, null)
     }
@@ -30,6 +32,16 @@ object SessionManager {
     fun clearData(context: Context) {
         val editor = context.getSharedPreferences(context.getString(R.string.app_name), Context.MODE_PRIVATE).edit()
         editor.clear()
-        editor.apply()
+        editor.commit()
+    }
+
+    fun isTokenExpired(token: String): Boolean {
+        return try {
+            val jwt = JWT(token)
+            val expiresAt: Date? = jwt.expiresAt
+            expiresAt?.before(Date()) ?: true
+        } catch (e: Exception) {
+            true
+        }
     }
 }
